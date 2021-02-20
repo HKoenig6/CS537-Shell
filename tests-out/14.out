@@ -1,0 +1,4 @@
+mysh> 1 > tests-out/1.tmp
+mysh> 2 > tests-out/2.tmp
+mysh> 3 > tests-out/3.tmp
+mysh> mysh> mysh> mysh> 

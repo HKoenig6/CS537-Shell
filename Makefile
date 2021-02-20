@@ -11,6 +11,10 @@ CFLAGS=-Wall -Werror -g
 mysh: mysh.c
 	$(CC) $(CFLAGS) -o mysh mysh.c
 
+# Test cases
+test:
+	~cs537-1/tests/p3/run-tests.sh
+
 # .PHONY means this command does not actually produce an output file
 .PHONY: clean
 clean:

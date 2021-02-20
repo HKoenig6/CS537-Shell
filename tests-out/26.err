@@ -1,0 +1,5 @@
+/bin/ls: cannot access 'tests/p2a-test': No such file or directory
+/bin/ls: cannot access '>': No such file or directory
+/bin/ls: cannot access 'tests-out/output26': No such file or directory
+/bin/cat: tests-out/output26: No such file or directory
+/bin/cat: tests-out/output26: No such file or directory

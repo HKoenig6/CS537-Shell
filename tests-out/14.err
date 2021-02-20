@@ -1,0 +1,3 @@
+/bin/cat: tests-out/1.tmp: No such file or directory
+/bin/cat: tests-out/2.tmp: No such file or directory
+/bin/cat: tests-out/3.tmp: No such file or directory
