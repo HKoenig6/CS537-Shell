@@ -1,3 +1,4 @@
-mysh> mysh> hello the e >tests-out/tmp.txt
-mysh> mysh> hello the e >tests-out/tmp.txt
-mysh> mysh> 
+mysh> mysh> mysh> mysh> (alias,catthat,/bin/cat,tests-out/tmp.txt,(null),)
+(null)(/bin/echo,hello,there,`¡.`ü,)
+tests-out/tmp.txt(catthat,(null),)
+tests-out/tmp.txt

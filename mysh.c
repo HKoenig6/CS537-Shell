@@ -41,11 +41,22 @@ int main(int argc, char *argv[]) {
 	  thisToken[k] = cmd[i][k];
 	}
 	thisToken[reindex] = '\0';
-	printf("(%s, %s)", thisToken, refile);
+	if (!strcmp(refile, "")) { //space after redir
+	  refile = strtok(NULL, delim);
+	}
+	if (!strcmp(thisToken, "")) { //space before redir
+	  cmd[i] = NULL;
+	} else {
+	  cmd[i] = thisToken;
+	  cmd[i + 1] = NULL;
+	  i++;
+	}
+	break;
       }
       i++;
       cmd[i] = strtok(NULL, delim);
     }
+
     char *args[i + 1];
     for (int j = 0; j < i + 1; j++) {
       args[j] = cmd[j]; //eliminates null elements at end of cmd with args
