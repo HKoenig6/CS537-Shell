@@ -1,17 +1,27 @@
-mysh> mysh> mysh> CPPLINT.cfg
+alias ls /bin/ls tests
+alias
+ls
+CPPLINT.cfg
 Makefile
 mysh
 mysh.c
+output.9
 tester
+test.out
 tests
 tests-out
 test.txt
-mysh> mysh> mysh> CPPLINT.cfg
+alias ls /bin/cat tests/19.desc
+alias
+ls
+CPPLINT.cfg
 Makefile
 mysh
 mysh.c
+output.9
 tester
+test.out
 tests
 tests-out
 test.txt
-mysh> 
+exit

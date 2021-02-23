@@ -9,6 +9,13 @@
 static int BUFFER_SIZE = 512; //generic buffer size
 static const char delim[4] = "\t\n ";
 
+struct aliasNode {
+  char *alias;
+  char **args;
+  int argc;
+  struct aliasNode *next;
+};
+
 int main(int argc, char *argv[]) {
   FILE *fd = NULL;	
   if (argc > 1) {
@@ -28,8 +35,12 @@ int main(int argc, char *argv[]) {
   int reindex = 0; //used for when > char is not separated by whitespace
   char *refile = NULL; //file to redirect to
 
-  write(STDOUT_FILENO, prompt, strlen(prompt));
+  //construct linked list
+  struct aliasNode *head = malloc(sizeof(struct aliasNode));
+
+  if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
   while(fgets(buffer, BUFFER_SIZE, fd == NULL ? stdin : fd)) {
+    if (fd != NULL) { write(STDOUT_FILENO, buffer, strlen(buffer));}
     //tokenize the buffer
     cmd[i] = strtok(buffer, delim);
     while (cmd[i] != NULL) {
@@ -65,10 +76,77 @@ int main(int argc, char *argv[]) {
 
     //test for keywords
     if (args[0] == NULL) { //no command line input
-      write(STDOUT_FILENO, prompt, strlen(prompt));
+      i = 0;
+      redir = 0;
+      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
       continue;
     } else if (!strcmp(args[0], "exit")) { //exit program
       _exit(0);
+    } else if (!strcmp(args[0], "alias")) { //alias expected
+      if (i == 1) { //list all aliases
+	struct aliasNode *currNode = head;
+	do {
+	  if (currNode->alias != NULL && currNode->args != NULL) {
+	    write(STDOUT_FILENO, currNode->alias, strlen(currNode->alias));
+            write(STDOUT_FILENO, " ", 1);
+	    for (int m = 0; m < currNode->argc; m++) {
+	      write(STDOUT_FILENO, currNode->args[m], strlen(currNode->args[m]));
+              write(STDOUT_FILENO, " ", 1);
+	    }
+	    write(STDOUT_FILENO, "\n", 1);
+	  }
+          currNode = currNode->next;	  
+	} while (currNode != NULL);
+      } else if (i == 2) { //list a specific alias
+        struct aliasNode *currNode = head;
+        do {
+          if (!strcmp(args[1], currNode->alias)) {
+	    write(STDOUT_FILENO, currNode->alias, strlen(currNode->alias));
+            write(STDOUT_FILENO, " ", 1);
+	    for (int m = 0; m < currNode->argc; m++) {
+	      write(STDOUT_FILENO, currNode->args[m], strlen(currNode->args[m]));
+              write(STDOUT_FILENO, " ", 1);
+	    }
+	    write(STDOUT_FILENO, "\n", 1);
+	    break;
+	  }
+	  currNode = currNode->next;
+	} while (currNode != NULL);
+      } else { //construct new alias
+	char *aliasArr = malloc(sizeof(args[1]));
+	char **argArr = malloc(sizeof(args + 2));
+        
+	if (head->alias == NULL) { //initialize first list element
+          head->alias = aliasArr;
+	  strcpy(head->alias, args[1]);
+	  head->args = argArr;
+	  for (int m = 2; m < i; m++) {
+	    char *argElem  = malloc(sizeof(args[m]));
+	    head->args[m-2] = argElem;
+	    strcpy(head->args[m - 2], args[m]);
+	  }
+	  head->argc = i - 2;
+	} else {
+          struct aliasNode *newNode = head;
+	  while (newNode->next != NULL) {
+	    newNode = newNode->next;
+	  }
+	  newNode->next = malloc(sizeof(struct aliasNode));
+	  newNode->next->alias = aliasArr;
+	  strcpy(newNode->next->alias, args[1]);
+	  newNode->next->args = argArr;
+	  for (int m = 2; m < i; m++) {
+	    char *argElem  = malloc(sizeof(args[m]));
+	    newNode->next->args[m-2] = argElem;
+	    strcpy(newNode->next->args[m - 2], args[m]);
+	  }
+	  newNode->next->argc = i - 2;
+	}
+      }
+      i = 0;
+      redir = 0;
+      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
+      continue;
     }
 
     cpid = fork();
@@ -78,13 +156,15 @@ int main(int argc, char *argv[]) {
         close(STDOUT_FILENO);
 	open(refile, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
       }
-      execvp(args[0], args);
+      execv(args[0], args);
       _exit(1); //exec failed
     } else { //parent
       waitpid(cpid, &status, WUNTRACED | WCONTINUED);
     }
     i = 0;
     redir = 0;
-    write(STDOUT_FILENO, prompt, strlen(prompt));
+    if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
   }
 }
+
+

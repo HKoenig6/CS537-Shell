@@ -1,2 +1,4 @@
-mysh> mysh> test variable whitespace!
-mysh> 
+				
+		/bin/echo test	    variable	 whitespace!		 
+test variable whitespace!
+exit

@@ -1,2 +1,3 @@
-mysh> This should not display.
-mysh> 
+echo This should not display.
+This should not display.
+exit

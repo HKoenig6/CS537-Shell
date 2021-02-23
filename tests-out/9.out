@@ -1,1 +1,2 @@
-mysh> mysh> 
+ls > output.9 output.10
+exit

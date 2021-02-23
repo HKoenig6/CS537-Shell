@@ -1,90 +1,21 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <fcntl.h>
+# Build by running 'make mysh' or simply 'make'
+# Clean by running 'make clean'
 
-static int BUFFER_SIZE = 512; //generic buffer size
-static const char delim[4] = "\t\n ";
+# A couple standard variables:
+# C Compiler
+CC=gcc
+# C Flags
+CFLAGS=-Wall -Werror -g
 
-int main(int argc, char *argv[]) {
-  FILE *fd = NULL;	
-  if (argc > 1) {
-    fd = fopen(argv[1], "r");
-    if (fd == NULL) {
-      write(STDOUT_FILENO, "Error: cannot open file\n", BUFFER_SIZE);
-      _exit(1);
-    }
-  }
-  char buffer[BUFFER_SIZE];
-  char prompt[7] = "mysh> ";
-  char *cmd[100]; //initial parse
-  int cpid = 0;
-  int i = 0; //index of cmd arg
+# Main build command
+mysh: mysh.c
+	$(CC) $(CFLAGS) -o mysh mysh.c
 
-  int redir = 0; //bit flipped when redirection found
-  int reindex = 0; //used for when > char is not separated by whitespace
-  char *refile = NULL; //file to redirect to
+# Test cases
+test:
+	~cs537-1/tests/p3/run-tests.sh
 
-  write(STDOUT_FILENO, prompt, strlen(prompt));
-  while(fgets(buffer, BUFFER_SIZE, fd == NULL ? stdin : fd)) {
-    //tokenize the buffer
-    cmd[i] = strtok(buffer, delim);
-    while (cmd[i] != NULL) {
-      reindex = strcspn(cmd[i], ">");
-      if (reindex < strlen(cmd[i])) { //redirection found
-        redir = 1;
-        refile = cmd[i] + reindex + 1;
-	char thisToken[reindex + 1];
-	for (int k = 0; k < reindex; k++) {
-	  thisToken[k] = cmd[i][k];
-	}
-	thisToken[reindex] = '\0';
-	if (!strcmp(refile, "")) { //space after redir
-	  refile = strtok(NULL, delim);
-	}
-	if (!strcmp(thisToken, "")) { //space before redir
-	  cmd[i] = NULL;
-	} else {
-	  cmd[i] = thisToken;
-	  cmd[i + 1] = NULL;
-	  i++;
-	}
-	break;
-      }
-      i++;
-      cmd[i] = strtok(NULL, delim);
-    }
-
-    char *args[i + 1];
-    for (int j = 0; j < i + 1; j++) {
-      args[j] = cmd[j]; //eliminates null elements at end of cmd with args
-    }
-
-    //test for keywords
-    if (args[0] == NULL) { //no command line input
-      write(STDOUT_FILENO, prompt, strlen(prompt));
-      continue;
-    } else if (!strcmp(args[0], "exit")) { //exit program
-      _exit(0);
-    }
-
-    cpid = fork();
-    int status;
-    if (!cpid) { //child
-      if (redir) {
-        close(STDOUT_FILENO);
-	open(refile, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
-      }
-      execvp(args[0], args);
-      _exit(1); //exec failed
-    } else { //parent
-      waitpid(cpid, &status, WUNTRACED | WCONTINUED);
-    }
-    i = 0;
-    redir = 0;
-    write(STDOUT_FILENO, prompt, strlen(prompt));
-  }
-}
+# .PHONY means this command does not actually produce an output file
+.PHONY: clean
+clean:
+	rm -rf mysh

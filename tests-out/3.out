@@ -1,4 +1,5 @@
-mysh> 10.desc
+/bin/ls tests
+10.desc
 10.err
 10.in
 10.out
@@ -225,5 +226,6 @@ mysh> 10.desc
 9.run
 segfault
 segfault.c
-mysh> Batchfile with multiple commands as input.
-mysh> 
+/bin/cat tests/3.desc
+Batchfile with multiple commands as input.
+exit

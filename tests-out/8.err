@@ -1,2 +1,1 @@
-timeout: the monitored command dumped core
-./tester/run-tests.sh: line 26: 2758070 Segmentation fault      timeout 5 ./mysh tests/8.in
+/bin/ls: write error: Bad file descriptor

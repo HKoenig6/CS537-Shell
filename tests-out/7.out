@@ -1,5 +1,4 @@
-mysh> This is one command
-mysh> This is the last command
-mysh> (/bin/echo,This,is,one,command,(null),)
-(null)(/bin/echo,This,is,the,last,command,(null),)
-(null)
+/bin/echo This is one command
+This is one command
+/bin/echo This is the last command
+This is the last command

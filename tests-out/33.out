@@ -1,1 +1,4 @@
-mysh> mysh> mysh> mysh> 
+alias ls /bin/ls
+unalias
+alias
+exit

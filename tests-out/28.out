@@ -1,6 +1,5 @@
-mysh> mysh> mysh> mysh> mysh> mysh> (alias,ls,/bin/ls,(null),)
-(null)(alias,(null),)
-(null)(alias,ls,(null),)
-(null)(unalias,ls,(null),)
-(null)(alias,(null),)
-(null)
+alias ls /bin/ls
+alias
+alias ls
+unalias ls
+alias

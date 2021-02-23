@@ -1,1 +1,2 @@
+cat ./Makefile > test.out
 /bin/ls

@@ -1,5 +1,3 @@
 mysh> this is a test
 mysh> Interactive mode (ended with EOF)
-mysh> (/bin/echo,this,is,a,test,(null),)
-(null)(/bin/cat,tests/5.desc,(null),)
-(null)
+mysh> 

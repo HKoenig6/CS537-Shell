@@ -1,7 +1,9 @@
-mysh> mysh> mysh> mysh> mysh> mysh> mysh> (/bin/echo,1,0uè(ı,)
-tests-out/1.tmp(/bin/echo,2,0uè(ı,)
-tests-out/2.tmp(/bin/echo,3,0uè(ı,)
-tests-out/3.tmp(/bin/cat,tests-out/1.tmp,(null),)
--out/1.tmp(/bin/cat,tests-out/2.tmp,(null),)
--out/2.tmp(/bin/cat,tests-out/3.tmp,(null),)
--out/3.tmp
+/bin/echo 1 > tests-out/1.tmp
+/bin/echo 2 > tests-out/2.tmp
+/bin/echo 3 > tests-out/3.tmp
+/bin/cat tests-out/1.tmp
+1
+/bin/cat tests-out/2.tmp
+2
+/bin/cat tests-out/3.tmp
+3

@@ -1,2 +1,3 @@
-mysh> Going to segfault!
-mysh> 
+tests/segfault
+Going to segfault!
+exit

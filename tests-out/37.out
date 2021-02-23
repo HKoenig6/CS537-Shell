@@ -1,26 +1,25 @@
-mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> mysh> (alias,a1,/bin/ls,tests/37.desc,(null),)
-(null)(alias,a2,/bin/cat,tests/37.desc,(null),)
-(null)(alias,a5,/usr/bin/touch,tests/37.desc,(null),)
-(null)(a1,(null),)
-(null)(a2,(null),)
-(null)(a3,(null),)
-(null)(alias,a3,/bin/mkdir,tests-out/tmp,(null),)
-(null)(a3,(null),)
-(null)(alias,(null),)
-(null)(alias,a4,/bin/rm,-rf,tests-out/tmp,(null),)
-(null)(a4,(null),)
-(null)(a5,(null),)
-(null)(alias,(null),)
-(null)(a5,(null),)
-(null)(unalias,a5,(null),)
-(null)(unalias,a4,(null),)
-(null)(alias,a2,/usr/bin/touch,tests/37.desc,(null),)
-(null)(a2,(null),)
-(null)(unalias,a2,(null),)
-(null)(a2,(null),)
-(null)(a4,(null),)
-(null)(unalias,a1,(null),)
-(null)(unalias,a3,(null),)
-(null)(a1,(null),)
-(null)(a3,(null),)
-(null)
+alias a1 /bin/ls tests/37.desc
+alias a2 /bin/cat tests/37.desc
+alias a5 /usr/bin/touch tests/37.desc
+a1
+a2
+a3
+alias a3 /bin/mkdir tests-out/tmp
+a3
+alias
+alias a4 /bin/rm -rf tests-out/tmp
+a4
+a5
+alias
+a5
+unalias a5
+unalias a4
+alias a2 /usr/bin/touch tests/37.desc
+a2
+unalias a2
+a2
+a4
+unalias a1
+unalias a3
+a1
+a3

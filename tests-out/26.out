@@ -1,7 +1,7 @@
-mysh> mysh> mysh> mysh> mysh> hello
-mysh> (/bin/ls,tests/p2a-test,°©eü,)
-tests-out/output26(/bin/cat,tests-out/output26,(null),)
-26(/bin/echo,this,should,be,in,the,file,à©eü,)
-tests-out/output26(/bin/cat,tests-out/output26,(null),)
-tests-out/output26(/bin/echo,hello,(null),)
-tests-out/output26
+/bin/ls tests/p2a-test > tests-out/output26
+/bin/cat tests-out/output26
+/bin/echo this should be in the file > tests-out/output26
+/bin/cat tests-out/output26
+this should be in the file
+/bin/echo hello
+hello
