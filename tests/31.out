@@ -1,12 +1,3 @@
-alias ls /bin/ls tests
-alias whoami /usr/bin/whoami
-alias
-ls /bin/ls tests
-whoami /usr/bin/whoami
-unalias whoami
-alias
-ls /bin/ls tests
-ls
 10.desc
 10.err
 10.in
@@ -232,6 +223,15 @@ ls
 9.out
 9.rc
 9.run
+alias
+alias
+alias ls /bin/ls tests
+alias whoami /usr/bin/whoami
+exit
+ls
+ls /bin/ls tests
+ls /bin/ls tests
 segfault
 segfault.c
-exit
+unalias whoami
+whoami /usr/bin/whoami

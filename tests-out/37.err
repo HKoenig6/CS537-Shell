@@ -1,0 +1,3 @@
+/bin/mkdir: cannot create directory ‘tests-out/tmp’: File exists
+free(): double free detected in tcache 2
+timeout: the monitored command dumped core

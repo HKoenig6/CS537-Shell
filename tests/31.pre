@@ -8,4 +8,6 @@ echo "alias" >> tests/31.out &&
 echo "ls /bin/ls tests" >> tests/31.out &&
 echo "ls" >> tests/31.out &&
 ls tests >> tests/31.out &&
-echo "exit" >> tests/31.out
+echo "exit" >> tests/31.out &&
+cat tests/31.out | sort > tests/tmp.txt &&
+mv tests/tmp.txt tests/31.out

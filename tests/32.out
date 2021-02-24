@@ -1,10 +1,10 @@
+alias
+alias
 alias ls /bin/ls
 alias whoami /usr/bin/whoami
-alias
-ls /bin/ls
-whoami /usr/bin/whoami
-unalias whoami
-alias
-ls /bin/ls
-whoami
 exit
+ls /bin/ls
+ls /bin/ls
+unalias whoami
+whoami
+whoami /usr/bin/whoami

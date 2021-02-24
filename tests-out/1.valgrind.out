@@ -1,3 +1,2 @@
 echo This should not display.
-This should not display.
 exit

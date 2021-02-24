@@ -1,14 +1,19 @@
-alias ls /bin/ls
-alias whoami /usr/bin/whoami
-alias ll /bin/ls -l
-alias psh /usr/bin/ps --help
+alias
+alias
 alias la /bin/ls -l -a
-alias
-unalias ls
-unalias whoami
-unalias ll
-alias
-unalias psh
+alias ll /bin/ls -l
+alias ls /bin/ls
+alias psh /usr/bin/ps --help
+alias whoami /usr/bin/whoami
+la /bin/ls -l -a 
+la /bin/ls -l -a 
+ll /bin/ls -l 
+ls /bin/ls 
+psh /usr/bin/ps --help 
+psh /usr/bin/ps --help 
 unalias la
-alias
-exit
+unalias ll
+unalias ls
+unalias psh
+unalias whoami
+whoami /usr/bin/whoami 

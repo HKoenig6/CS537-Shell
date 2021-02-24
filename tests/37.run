@@ -1,1 +1,1 @@
-./mysh tests/37.in
+./mysh tests/37.in | sort

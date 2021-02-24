@@ -47,14 +47,14 @@ int main(int argc, char *argv[]) {
       reindex = strcspn(cmd[i], ">");
       if (reindex < strlen(cmd[i])) { //redirection found
         redir = 1;
-        refile = cmd[i] + reindex + 1;
+        refile = strdup(cmd[i] + reindex + 1);
 	char thisToken[reindex + 1];
 	for (int k = 0; k < reindex; k++) {
 	  thisToken[k] = cmd[i][k];
 	}
 	thisToken[reindex] = '\0';
 	if (!strcmp(refile, "")) { //space after redir
-	  refile = strtok(NULL, delim);
+	  refile = strdup(strtok(NULL, delim));
 	}
 	if (!strcmp(thisToken, "")) { //space before redir
 	  cmd[i] = NULL;
@@ -147,6 +147,50 @@ int main(int argc, char *argv[]) {
       redir = 0;
       if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
       continue;
+    } else if (!strcmp(args[0], "unalias")) { //unalias expected
+      if (head->alias != NULL && !strcmp(args[1], head->alias)) { //special case: head is removed
+        free(head->alias);
+	for (int i = 0; i < head->argc + 1; i++) {
+	  free(head->args[i]);
+	}
+	free(head->args);
+	if (head->next != NULL) {
+	  head = head->next; //new head
+	} else {
+	  head = malloc(sizeof(struct aliasNode));
+	}
+      } else { //iterate through rest
+	struct aliasNode *prevNode = head;
+	struct aliasNode *currNode = head->next;
+        while (currNode != NULL) {
+	  if (!strcmp(args[1], currNode->alias)) {
+            free(head->alias);
+	    for (int i = 0; i < head->argc; i++) {
+	      free(head->args[i]);
+	    }
+	    free(head->args);
+	    prevNode->next = currNode->next; //eliminate from link
+          }
+	  prevNode = currNode;
+	  currNode = currNode->next;
+	}
+      }
+      i = 0;
+      redir = 0;
+      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
+      continue;
+    } else { //cycle through alias names and strcmp with args[0]
+      struct aliasNode *currNode = head;
+      do {
+        if (currNode->alias == NULL) {break;} //head not initialized
+	if (!strcmp(currNode->alias, args[0])) {
+          for (int i = 0; i < currNode->argc + 1; i++) {
+	    args[i] = currNode->args[i]; //alias applied to args
+	  }
+	  break;
+	}
+	currNode = currNode->next;
+      } while (currNode != NULL);
     }
 
     cpid = fork();
