@@ -154,22 +154,25 @@ int main(int argc, char *argv[]) {
 	  free(head->args[i]);
 	}
 	free(head->args);
+	struct aliasNode *freedHead = head;
 	if (head->next != NULL) {
 	  head = head->next; //new head
 	} else {
 	  head = malloc(sizeof(struct aliasNode));
 	}
+	free(freedHead);
       } else { //iterate through rest
 	struct aliasNode *prevNode = head;
 	struct aliasNode *currNode = head->next;
         while (currNode != NULL) {
 	  if (!strcmp(args[1], currNode->alias)) {
-            free(head->alias);
-	    for (int i = 0; i < head->argc; i++) {
-	      free(head->args[i]);
+            free(currNode->alias);
+	    for (int i = 0; i < currNode->argc; i++) {
+	      free(currNode->args[i]);
 	    }
-	    free(head->args);
+	    free(currNode->args);
 	    prevNode->next = currNode->next; //eliminate from link
+            free(currNode);
           }
 	  prevNode = currNode;
 	  currNode = currNode->next;
