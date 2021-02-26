@@ -16,6 +16,15 @@ struct aliasNode {
   struct aliasNode *next;
 };
 
+void cmderror(int status) {
+  switch (status) {
+    case 0: ;//redirection error
+      char *redirError = "Redirection misformatted.\n";
+      write(STDOUT_FILENO, redirError, strlen(redirError));
+      return;
+  }
+}
+
 int main(int argc, char *argv[]) {
   FILE *fd = NULL;	
   if (argc > 1) {
@@ -34,6 +43,7 @@ int main(int argc, char *argv[]) {
   int redir = 0; //bit flipped when redirection found
   int reindex = 0; //used for when > char is not separated by whitespace
   char *refile = NULL; //file to redirect to
+  int err = 0; //indicates error before potential execution
 
   //construct linked list
   struct aliasNode *head = malloc(sizeof(struct aliasNode));
@@ -46,6 +56,10 @@ int main(int argc, char *argv[]) {
     while (cmd[i] != NULL) {
       reindex = strcspn(cmd[i], ">");
       if (reindex < strlen(cmd[i])) { //redirection found
+	if (i == 0 && cmd[i][0] == '>') { //line begins with greater sign; error
+	  cmderror(0);
+          err = 1;
+	}
         redir = 1;
         refile = strdup(cmd[i] + reindex + 1);
 	char thisToken[reindex + 1];
@@ -54,7 +68,8 @@ int main(int argc, char *argv[]) {
 	}
 	thisToken[reindex] = '\0';
 	if (!strcmp(refile, "")) { //space after redir
-	  refile = strdup(strtok(NULL, delim));
+          char *nullTok = strtok(NULL, delim);
+	  refile = nullTok == NULL ? NULL : strdup(nullTok);
 	}
 	if (!strcmp(thisToken, "")) { //space before redir
 	  cmd[i] = NULL;
@@ -63,6 +78,18 @@ int main(int argc, char *argv[]) {
 	  cmd[i + 1] = NULL;
 	  i++;
 	}
+	// no file specified or
+	// another redirection symbol used
+	if ((refile == NULL || strcspn(refile, ">") < strlen(refile)) && !err) {
+	  cmderror(0);
+	  err = 1;
+	} else {
+	  cmd[i + 1] = strtok(NULL, delim);
+	  if (cmd[i + 1] != NULL && !err) { //more than one file specified
+	    cmderror(0);
+	    err = 1;
+	  }
+        }
 	break;
       }
       i++;
@@ -76,10 +103,7 @@ int main(int argc, char *argv[]) {
 
     //test for keywords
     if (args[0] == NULL) { //no command line input
-      i = 0;
-      redir = 0;
-      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
-      continue;
+      err = 1;
     } else if (!strcmp(args[0], "exit")) { //exit program
       _exit(0);
     } else if (!strcmp(args[0], "alias")) { //alias expected
@@ -100,7 +124,7 @@ int main(int argc, char *argv[]) {
       } else if (i == 2) { //list a specific alias
         struct aliasNode *currNode = head;
         do {
-          if (!strcmp(args[1], currNode->alias)) {
+          if (currNode->alias != NULL && !strcmp(args[1], currNode->alias)) {
 	    write(STDOUT_FILENO, currNode->alias, strlen(currNode->alias));
             write(STDOUT_FILENO, " ", 1);
 	    for (int m = 0; m < currNode->argc; m++) {
@@ -143,10 +167,7 @@ int main(int argc, char *argv[]) {
 	  newNode->next->argc = i - 2;
 	}
       }
-      i = 0;
-      redir = 0;
-      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
-      continue;
+      err = 1;
     } else if (!strcmp(args[0], "unalias")) { //unalias expected
       if (head->alias != NULL && !strcmp(args[1], head->alias)) { //special case: head is removed
         free(head->alias);
@@ -178,10 +199,7 @@ int main(int argc, char *argv[]) {
 	  currNode = currNode->next;
 	}
       }
-      i = 0;
-      redir = 0;
-      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
-      continue;
+      err = 1;
     } else { //cycle through alias names and strcmp with args[0]
       struct aliasNode *currNode = head;
       do {
@@ -195,13 +213,29 @@ int main(int argc, char *argv[]) {
 	currNode = currNode->next;
       } while (currNode != NULL);
     }
-
+    if (err) { //no statement is executed
+      err = 0;
+      i = 0;
+      redir = 0;
+      if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
+      continue;
+    }
     cpid = fork();
     int status;
     if (!cpid) { //child
       if (redir) {
+	int outFile;
+        outFile = dup(STDOUT_FILENO);
         close(STDOUT_FILENO);
-	open(refile, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+	int status;
+	status = open(refile, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+	if (status == -1) {
+          dup2(outFile, STDOUT_FILENO);
+	  write(STDOUT_FILENO, "Cannot write to file ", 21);
+	  write(STDOUT_FILENO, refile, strlen(refile));
+	  write(STDOUT_FILENO, ".\n", 2);
+	  _exit(1);
+	}
       }
       execv(args[0], args);
       _exit(1); //exec failed

@@ -1,2 +1,5 @@
-cat ./Makefile > test.out
-/bin/ls
+alias i j
+alias k l
+alias ls /bin/ls -al
+ls > test.out
+exit

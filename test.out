@@ -1,15 +1,10 @@
-total 59
-drwxrwxr-x 6 hansk hansk  2048 Feb 24 11:40 .
-drwxrwxr-x 5 hansk hansk  2048 Feb 16 21:30 ..
--rwx------ 1 hansk hansk     0 Feb 24 11:26 alias
--rw-rw-r-- 1 hansk hansk   132 Feb 24 01:04 CPPLINT.cfg
-drwxrwxr-x 8 hansk hansk  2048 Feb 24 01:05 .git
--rw-rw-r-- 1 hansk hansk   389 Feb 20 14:23 Makefile
--rwxrwxr-x 1 hansk hansk 27120 Feb 24 11:40 mysh
--rw-rw-r-- 1 hansk hansk  6388 Feb 24 11:40 mysh.c
--rwx------ 1 hansk hansk     0 Feb 24 01:04 output.9
-drwxr-xr-x 3 hansk hansk  2048 Feb 24 01:04 tester
--rw-rw-r-- 1 hansk hansk     0 Feb 24 11:41 test.out
-drwxrwxr-x 2 hansk hansk  8192 Feb 24 01:04 tests
-drwxrwxr-x 3 hansk hansk  6144 Feb 24 01:04 tests-out
--rw-rw-r-- 1 hansk hansk    34 Feb 22 01:35 test.txt
+CPPLINT.cfg
+Makefile
+mysh
+mysh.c
+output.9
+tester
+test.out
+tests
+tests-out
+test.txt
