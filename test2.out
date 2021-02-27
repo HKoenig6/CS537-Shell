@@ -1,6 +1,11 @@
 alias ls /bin/ls tests
+alias whoami /usr/bin/whoami
 alias
-ls /bin/ls tests
+ls /bin/ls tests 
+whoami /usr/bin/whoami 
+unalias whoami
+alias
+ls /bin/ls tests 
 ls
 10.desc
 10.err
@@ -229,9 +234,4 @@ ls
 9.run
 segfault
 segfault.c
-alias ls /bin/cat tests/19.desc
-alias
-ls /bin/cat tests/19.desc
-ls
-Create then replace alias
 exit

@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
   int redir = 0;  // bit flipped when redirection found
   int reindex = 0;  // used for when > char is not separated by whitespace
   char *refile = NULL;  // file to redirect to
+  char *thisToken = NULL;  // potential token left of redir
   int err = 0;  // indicates error before potential execution
 
   // construct linked list
@@ -69,7 +70,7 @@ int main(int argc, char *argv[]) {
         }
         redir = 1;
         refile = strdup(cmd[i] + reindex + 1);
-        char thisToken[reindex + 1];
+        thisToken = malloc(reindex + 1);
         for (int k = 0; k < reindex; k++) {
           thisToken[k] = cmd[i][k];
         }
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
             for (int m = 0; m < currNode->argc; m++) {
               write(STDOUT_FILENO, currNode->args[m],
                 strlen(currNode->args[m]));
-              write(STDOUT_FILENO, " ", 1);
+              if (m != currNode->argc - 1) { write(STDOUT_FILENO, " ", 1); }
             }
             write(STDOUT_FILENO, "\n", 1);
           }
@@ -138,7 +139,7 @@ int main(int argc, char *argv[]) {
             for (int m = 0; m < currNode->argc; m++) {
               write(STDOUT_FILENO, currNode->args[m],
                 strlen(currNode->args[m]));
-              write(STDOUT_FILENO, " ", 1);
+              if (m != currNode->argc - 1) { write(STDOUT_FILENO, " ", 1); }
             }
             write(STDOUT_FILENO, "\n", 1);
             break;
@@ -203,7 +204,7 @@ int main(int argc, char *argv[]) {
       err = 1;
     } else if (!strcmp(args[0], "unalias")) {  // unalias expected
       if (i == 1 || i > 2) {
-        write(STDOUT_FILENO, "unalias: Incorrect number of arguments.\n", 40);
+        write(STDERR_FILENO, "unalias: Incorrect number of arguments.\n", 40);
       // special case: head is removed
       } else if (head->alias != NULL && !strcmp(args[1], head->alias)) {
         free(head->alias);
@@ -241,8 +242,9 @@ int main(int argc, char *argv[]) {
       do {
         if (currNode->alias == NULL) {break;}  // head not initialized
         if (!strcmp(currNode->alias, args[0])) {
-          for (int i = 0; i < currNode->argc + 1; i++) {
-            args[i] = currNode->args[i];  // alias applied to args
+          int c = currNode->argc;
+          for (int m = 0; m < c + 1; m++) {
+            args[m] = currNode->args[m];  // alias applied to args
           }
           break;
         }
@@ -267,9 +269,9 @@ int main(int argc, char *argv[]) {
         status = open(refile, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
         if (status == -1) {
           dup2(outFile, STDOUT_FILENO);
-          write(STDOUT_FILENO, "Cannot write to file ", 21);
-          write(STDOUT_FILENO, refile, strlen(refile));
-          write(STDOUT_FILENO, ".\n", 2);
+          write(STDERR_FILENO, "Cannot write to file ", 21);
+          write(STDERR_FILENO, refile, strlen(refile));
+          write(STDERR_FILENO, ".\n", 2);
           _exit(1);
         }
       }
@@ -277,11 +279,13 @@ int main(int argc, char *argv[]) {
       _exit(1);  // exec failed
     } else {  // parent
       waitpid(cpid, &status, WUNTRACED | WCONTINUED);
+      if (status) {
+        write(STDERR_FILENO, args[0], strlen(args[0]));
+        write(STDERR_FILENO, ": Command not found.\n", 21);
+      }
     }
     i = 0;
     redir = 0;
     if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
   }
 }
-
-

@@ -1,1 +1,8 @@
+a3: Command not found.
 /bin/mkdir: cannot create directory ‘tests-out/tmp’: File exists
+/bin/mkdir: Command not found.
+/bin/rm: Command not found.
+a2: Command not found.
+a4: Command not found.
+a1: Command not found.
+a3: Command not found.

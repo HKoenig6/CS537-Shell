@@ -229,9 +229,9 @@ alias ls /bin/ls tests
 alias whoami /usr/bin/whoami
 exit
 ls
-ls /bin/ls tests 
-ls /bin/ls tests 
+ls /bin/ls tests
+ls /bin/ls tests
 segfault
 segfault.c
 unalias whoami
-whoami /usr/bin/whoami 
+whoami /usr/bin/whoami
