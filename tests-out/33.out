@@ -1,2 +1,6 @@
 alias ls /bin/ls
 unalias
+unalias: Incorrect number of arguments.
+alias
+ls /bin/ls 
+exit

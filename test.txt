@@ -1,5 +1,10 @@
-alias i j
-alias k l
-alias ls /bin/ls -al
-ls > test.out
-exit
+CPPLINT.cfg
+Makefile
+mysh
+mysh.c
+output.9
+tester
+test.out
+tests
+tests-out
+test.txt
