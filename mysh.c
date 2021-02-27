@@ -151,20 +151,39 @@ int main(int argc, char *argv[]) {
 	  }
 	  head->argc = i - 2;
 	} else {
+          int exists;
+	  exists = 0; //alias already exists
           struct aliasNode *newNode = head;
-	  while (newNode->next != NULL) {
+	  struct aliasNode *prevNode;
+	  do {
+            if (!strcmp(args[1], newNode->alias)) {
+	      exists = 1;
+	      // just change args
+              for (int m = 2; m < i; m++) {
+	        char *argElem  = malloc(sizeof(args[m]));
+	        newNode->args[m-2] = argElem;
+	        strcpy(newNode->args[m - 2], args[m]);
+	      }
+	      newNode->argc = i - 2;
+	    }
+	    prevNode = newNode;
 	    newNode = newNode->next;
+	  } while (newNode != NULL);
+
+	  if (!exists) {
+	    newNode = malloc(sizeof(struct aliasNode));
+	    newNode->alias = aliasArr;
+	    strcpy(newNode->alias, args[1]);
+	    newNode->args = argArr;
+	    for (int m = 2; m < i; m++) {
+	      char *argElem  = malloc(sizeof(args[m]));
+	      newNode->args[m-2] = argElem;
+	      strcpy(newNode->args[m - 2], args[m]);
+	    }
+	    newNode->argc = i - 2;
+	    prevNode->next = newNode; //links new alias
 	  }
-	  newNode->next = malloc(sizeof(struct aliasNode));
-	  newNode->next->alias = aliasArr;
-	  strcpy(newNode->next->alias, args[1]);
-	  newNode->next->args = argArr;
-	  for (int m = 2; m < i; m++) {
-	    char *argElem  = malloc(sizeof(args[m]));
-	    newNode->next->args[m-2] = argElem;
-	    strcpy(newNode->next->args[m - 2], args[m]);
-	  }
-	  newNode->next->argc = i - 2;
+	  exists = 0;
 	}
       }
       err = 1;

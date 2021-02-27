@@ -28,7 +28,6 @@ alias a3 /bin/mkdir tests-out/tmp
 alias a4 /bin/rm -rf tests-out/tmp
 alias a5 /usr/bin/touch tests/37.desc
 Creates multiple aliases and runs them, then removes those aliases and tries to run them
-Creates multiple aliases and runs them, then removes those aliases and tries to run them
 tests/37.desc
 unalias a1
 unalias a2
