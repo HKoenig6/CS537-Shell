@@ -276,13 +276,11 @@ int main(int argc, char *argv[]) {
         }
       }
       execv(args[0], args);
+      write(STDERR_FILENO, args[0], strlen(args[0]));
+      write(STDERR_FILENO, ": Command not found.\n", 21);
       _exit(1);  // exec failed
     } else {  // parent
       waitpid(cpid, &status, WUNTRACED | WCONTINUED);
-      if (status) {
-        write(STDERR_FILENO, args[0], strlen(args[0]));
-        write(STDERR_FILENO, ": Command not found.\n", 21);
-      }
     }
     i = 0;
     redir = 0;
