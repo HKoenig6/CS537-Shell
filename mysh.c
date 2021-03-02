@@ -28,7 +28,7 @@ void cmderror(int status) {
 
 int main(int argc, char *argv[]) {
   FILE *fd = NULL;
-  if (argc > 2) { //too many args
+  if (argc > 2) {  // too many args
     write(STDERR_FILENO, "Usage: mysh [batch-file]\n", 25);
     _exit(1);
   } else if (argc > 1) {
@@ -54,6 +54,10 @@ int main(int argc, char *argv[]) {
 
   // construct linked list
   struct aliasNode *head = malloc(sizeof(struct aliasNode));
+  head->alias = NULL;
+  head->args = NULL;
+  head->next = NULL;
+
 
   if (fd == NULL) { write(STDOUT_FILENO, prompt, strlen(prompt));}
   while (fgets(buffer, BUFFER_SIZE, fd == NULL ? stdin : fd)) {
@@ -163,6 +167,7 @@ int main(int argc, char *argv[]) {
             strcpy(head->args[m - 2], args[m]);
           }
           head->argc = i - 2;
+          head->next = NULL;
         } else {
           int exists;
           exists = 0;  // alias already exists
@@ -171,11 +176,11 @@ int main(int argc, char *argv[]) {
           do {
             if (!strcmp(args[1], newNode->alias)) {
               exists = 1;
-	      char **oldArgs = newNode->args;
-	      for (int i = 0; i < newNode->argc; i++) {
-	        free(oldArgs[i]);
-	      }
-	      free(oldArgs);
+              char **oldArgs = newNode->args;
+              for (int i = 0; i < newNode->argc; i++) {
+                free(oldArgs[i]);
+              }
+              free(oldArgs);
               // just change args
               newNode->args = argArr;
               for (int m = 2; m < i; m++) {
@@ -201,6 +206,7 @@ int main(int argc, char *argv[]) {
             }
             newNode->argc = i - 2;
             prevNode->next = newNode;  // links new alias
+            newNode->next = NULL;
           }
           exists = 0;
         }
@@ -224,7 +230,7 @@ int main(int argc, char *argv[]) {
           head = malloc(sizeof(struct aliasNode));
         }
         free(freedHead);
-      } else if (head->alias != NULL){  // iterate through rest
+      } else if (head->alias != NULL) {  // iterate through rest
         struct aliasNode *prevNode = head;
         struct aliasNode *currNode = head->next;
         while (currNode != NULL) {
