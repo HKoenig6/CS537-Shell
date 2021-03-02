@@ -18,4 +18,4 @@ test:
 # .PHONY means this command does not actually produce an output file
 .PHONY: clean
 clean:
-	rm -rf mysh
+	rm -rf mysh ./tests ./tests-out

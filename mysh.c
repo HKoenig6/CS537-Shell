@@ -152,15 +152,14 @@ int main(int argc, char *argv[]) {
           write(STDERR_FILENO, "alias: Too dangerous to alias that.\n", 36);
         } else {
         char *aliasArr = malloc(sizeof(args[1]));
-        char **argArr = malloc(sizeof(args + 2));
+        char **argArr = malloc(sizeof(args) - 2 * sizeof(args[0]));
 
         if (head->alias == NULL) {  // initialize first list element
           head->alias = aliasArr;
           strcpy(head->alias, args[1]);
           head->args = argArr;
           for (int m = 2; m < i; m++) {
-            char *argElem  = malloc(sizeof(args[m]));
-            head->args[m-2] = argElem;
+            head->args[m-2] = malloc(strlen(args[m]) + 1);
             strcpy(head->args[m - 2], args[m]);
           }
           head->argc = i - 2;
@@ -172,9 +171,15 @@ int main(int argc, char *argv[]) {
           do {
             if (!strcmp(args[1], newNode->alias)) {
               exists = 1;
+	      char **oldArgs = newNode->args;
+	      for (int i = 0; i < newNode->argc; i++) {
+	        free(oldArgs[i]);
+	      }
+	      free(oldArgs);
               // just change args
+              newNode->args = argArr;
               for (int m = 2; m < i; m++) {
-                char *argElem  = malloc(sizeof(args[m]));
+                char *argElem  = malloc(strlen(args[m]) + 1);
                 newNode->args[m-2] = argElem;
                 strcpy(newNode->args[m - 2], args[m]);
               }
@@ -190,7 +195,7 @@ int main(int argc, char *argv[]) {
             strcpy(newNode->alias, args[1]);
             newNode->args = argArr;
             for (int m = 2; m < i; m++) {
-              char *argElem  = malloc(sizeof(args[m]));
+              char *argElem  = malloc(strlen(args[m]) + 1);
               newNode->args[m-2] = argElem;
               strcpy(newNode->args[m - 2], args[m]);
             }
@@ -219,7 +224,7 @@ int main(int argc, char *argv[]) {
           head = malloc(sizeof(struct aliasNode));
         }
         free(freedHead);
-      } else {  // iterate through rest
+      } else if (head->alias != NULL){  // iterate through rest
         struct aliasNode *prevNode = head;
         struct aliasNode *currNode = head->next;
         while (currNode != NULL) {

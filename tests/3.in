@@ -1,3 +1,0 @@
-/bin/ls tests
-/bin/cat tests/3.desc
-exit
