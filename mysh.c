@@ -286,7 +286,7 @@ int main(int argc, char *argv[]) {
           _exit(1);
         }
       }
-      execv(args[0], args);
+      execvp(args[0], args);
       write(STDERR_FILENO, args[0], strlen(args[0]));
       write(STDERR_FILENO, ": Command not found.\n", 21);
       _exit(1);  // exec failed
