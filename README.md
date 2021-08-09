@@ -21,11 +21,11 @@ Available Functionality:
    -'exit' will terminate the shell
    
 Type
-'''
+```
 ./mysh
-'''
+```
 to enter interactive mode OR
-'''
+```
 ./mysh  <filename>
-'''
+```
 to execute lines from a file in batch mode.
