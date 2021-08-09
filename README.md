@@ -26,6 +26,6 @@ Type
 ```
 to enter interactive mode OR
 ```
-./mysh  <filename>
+./mysh <filename>
 ```
 to execute lines from a file in batch mode.
