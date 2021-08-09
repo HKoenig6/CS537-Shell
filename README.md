@@ -20,8 +20,8 @@ Available Functionality:
    
    -'exit' will terminate the shell
    
-Type 
+Type:
       ./mysh 
-to enter interactive mode OR   
+to enter interactive mode OR:
       ./mysh  <filename>  
 to execute lines from a file in batch mode.
